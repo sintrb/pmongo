@@ -1,2 +1,2 @@
 # pmongo
-A small Python MongoDB tool.
+A small Python MongoDB Document-Based access engine..
