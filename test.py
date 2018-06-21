@@ -1,16 +1,10 @@
-PMongo
-===============
-A small Python MongoDB Document-Based access engine.
+# -*- coding: UTF-8 -*
+'''
+Created on 2018-06-15
 
-Install
-===============
-```
- pip install pmongo
-```
+@author: trb
+'''
 
-Useage
-===============
-```python
 # base use
 
 # import
@@ -78,16 +72,3 @@ print 'age>11:', Data2.objects.find(age__gt=11).count()
 
 Data2.objects.find().delete()
 
-```
-
-Output:
-
-```
-d1.id: 5b2bad8b2801ca156e7aa9d8
-grade=2: [Data[{u'grade': 2, u'age': 8, u'_id': ObjectId('5b2bad8b2801ca156e7aa9d8'), u'name': u'Tom'}], Data[{u'grade': 2, u'age': 7, u'_id': ObjectId('5b2bad8b2801ca156e7aa9d9'), u'name': u'Lucy'}]]
-count of grade=2: 2
-count of grade=2: 1
--------
-age>=10: 2
-age>11: 1
-```
