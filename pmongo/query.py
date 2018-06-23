@@ -22,6 +22,8 @@ class QueryManger(Manager):
             'float': lambda v: {'$eq': float(v['integer'])},
             'decimal': lambda v: {'$eq': float(v['decimal'])},
             'text': lambda v: {'$eq': str(v['text'])},
+            'in': lambda v: {'$in': v['in']},
+            'between': lambda v: {'$gte': v['between'][0], '$lte': v['between'][1]}
         }
         for k, v in q.items():
             if '__' in k:

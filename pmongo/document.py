@@ -54,6 +54,19 @@ class Manager(object):
     def _wrap_query(self, q):
         return q
 
+    def _wrap_objid(self, v):
+        from bson import ObjectId
+        if type(v) == dict:
+            return {
+                nk: self._wrap_objid(nv) for nk,nv in v.items()
+            }
+        elif type(v) in [list, type, set]:
+            return [self._wrap_objid(nv) for nv in v]
+        elif not isinstance(v, ObjectId):
+            return ObjectId(str(v))
+        else:
+            return v
+
 
 class QuerySet(object):
     def __init__(self, manager=None):
@@ -82,7 +95,7 @@ class QuerySet(object):
         return self.new_obj(data=self.col.find_one(self.query))
 
     def delete(self):
-        return self.col.remove(self.query)
+        return self.col.remove(self.query)['n']
 
     def exists(self):
         return True if self.count() else False
@@ -105,14 +118,13 @@ class QuerySet(object):
 
     @property
     def query(self):
-        from bson import ObjectId
         q = {}
         for c in self.chain:
-            if c.get('_id') and isinstance(c['_id'], basestring):
-                q.update(c)
-                q['_id'] = ObjectId(c['_id'])
-            else:
-                q.update(c)
+            q.update(c)
+        if q.get('id'):
+            q['_id'] = q.pop('id')
+        if q.get('_id'):
+            q['_id'] = self.manager._wrap_objid(q['_id'])
         return q
 
     def to_json(self):
@@ -204,7 +216,6 @@ class Document(six.with_metaclass(BaseDocument)):
             del self.data['_id']
 
     def unset(self, keys, db=None):
-        print 'un', keys
         if keys and self.id:
             from bson import ObjectId
-            self.objects.unset({'_id': ObjectId(self.id) if isinstance(self.id, basestring) else self.id}, keys, db=db)
+            return self.objects.unset({'_id': ObjectId(self.id) if isinstance(self.id, basestring) else self.id}, keys, db=db)

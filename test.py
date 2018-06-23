@@ -70,5 +70,10 @@ Data2(age=15, name='Jack').save()
 print 'age>=10:', Data2.objects.find(age__gte=10).count()
 print 'age>11:', Data2.objects.find(age__gt=11).count()
 
+print Data2.objects.find(age__between=(10,21)).count()
+
+print d1.unset(['age'])
+
+
 Data2.objects.find().delete()
 
