@@ -206,6 +206,12 @@ class Document(six.with_metaclass(BaseDocument)):
     def update(self, d):
         self.data.update(d)
 
+    def keys(self):
+        return self.data.keys()
+
+    def values(self):
+        return self.data.values()
+
     @property
     def id(self):
         return self.data['_id'] if self.data and '_id' in self.data else None
