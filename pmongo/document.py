@@ -197,6 +197,9 @@ class Document(six.with_metaclass(BaseDocument)):
     def __unicode__(self):
         return self.__str__()
 
+    def __delitem__(self, key):
+        return self.data.__delitem__(key)
+
     def to_json(self):
         return self.data
 
