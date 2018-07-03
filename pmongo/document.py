@@ -20,6 +20,12 @@ class Manager(object):
             query = query.find(*args, **kwargs)
         return query
 
+    def create(self, **kwargs):
+        '''Create and save'''
+        obj = self.model(**kwargs)
+        obj.save()
+        return obj
+
     @property
     def colname(self):
         '''collection name'''
@@ -110,7 +116,11 @@ class QuerySet(object):
         return self.find(_id=(args[0])).first() if args else self.find(**kwargs).first()
 
     def update(self, *args, **kwargs):
-        pass
+        ope = args[0] if args else ({'$set': kwargs} if kwargs else None)
+        if ope:
+            return self.col.update_many(self.query, ope).modified_count
+        else:
+            return 0
 
     @property
     def col(self):
@@ -225,6 +235,10 @@ class Document(six.with_metaclass(BaseDocument)):
             del self.data['_id']
 
     def unset(self, keys, db=None):
+        for k in keys:
+            if k not in self.data:
+                continue
+            del self.data[k]
         if keys and self.id:
             from bson import ObjectId
             return self.objects.unset({'_id': ObjectId(self.id) if isinstance(self.id, basestring) else self.id}, keys, db=db)

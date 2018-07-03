@@ -58,7 +58,6 @@ print 'count of grade=2:', Data.objects.find(grade=2).count()
 # delete document
 Data.objects.find(grade=2).delete()
 
-
 print '-------'
 
 # django like query
@@ -70,24 +69,48 @@ class Data2(Document):
     objects = QueryManger()
 
 
+print Data2.objects.create(age=20, name='Tom')
+
 Data2(age=10, name='Jone').save()
 Data2(age=15, name='Jack').save()
 
 print 'age>=10:', Data2.objects.find(age__gte=10).count()
 print 'age>11:', Data2.objects.find(age__gt=11).count()
 
-Data2.objects.find().delete()
+print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
+
+# delete age field
+d1.unset(['age'])
+print d1
+
+# update data
+print 'update', Data2.objects.find(age__between=(10, 21)).update(age=25)
+
+print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
+
+print 'age=25', Data2.objects.find(age=25).count()
+
+print Data.objects.find().delete()
+print Data2.objects.find().delete()
 
 ```
 
 Output:
 
 ```
-d1.id: 5b2bad8b2801ca156e7aa9d8
-grade=2: [Data[{u'grade': 2, u'age': 8, u'_id': ObjectId('5b2bad8b2801ca156e7aa9d8'), u'name': u'Tom'}], Data[{u'grade': 2, u'age': 7, u'_id': ObjectId('5b2bad8b2801ca156e7aa9d9'), u'name': u'Lucy'}]]
+d1.id: 5b3ade192801caffa46cba8a
+grade=2: [Data[{u'grade': 2, u'age': 8, u'_id': ObjectId('5b3ade192801caffa46cba8a'), u'name': u'Tom'}], Data[{u'grade': 2, u'age': 7, u'_id': ObjectId('5b3ade192801caffa46cba8b'), u'name': u'Lucy'}]]
 count of grade=2: 2
 count of grade=2: 1
 -------
-age>=10: 2
-age>11: 1
+Data2[{'age': 20, '_id': ObjectId('5b3ade192801caffa46cba8c'), 'name': 'Tom'}]
+age>=10: 3
+age>11: 2
+between 10~21 3
+Data[{'grade': 2, '_id': ObjectId('5b3ade192801caffa46cba8a'), 'name': 'Tom'}]
+update 3
+between 10~21 0
+age=25 3
+1
+3
 ```

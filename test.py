@@ -52,7 +52,6 @@ print 'count of grade=2:', Data.objects.find(grade=2).count()
 # delete document
 Data.objects.find(grade=2).delete()
 
-
 print '-------'
 
 # django like query
@@ -64,16 +63,26 @@ class Data2(Document):
     objects = QueryManger()
 
 
+print Data2.objects.create(age=20, name='Tom')
+
 Data2(age=10, name='Jone').save()
 Data2(age=15, name='Jack').save()
 
 print 'age>=10:', Data2.objects.find(age__gte=10).count()
 print 'age>11:', Data2.objects.find(age__gt=11).count()
 
-print Data2.objects.find(age__between=(10,21)).count()
+print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
 
-print d1.unset(['age'])
+# delete age field
+d1.unset(['age'])
+print d1
 
+# update data
+print 'update', Data2.objects.find(age__between=(10, 21)).update(age=25)
 
-Data2.objects.find().delete()
+print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
 
+print 'age=25', Data2.objects.find(age=25).count()
+
+print Data.objects.find().delete()
+print Data2.objects.find().delete()
