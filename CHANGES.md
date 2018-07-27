@@ -9,4 +9,6 @@ CHANGES
 
 - support "create, update"
 
+1.0.8
 
+- fix find() with dictionary param

@@ -84,5 +84,11 @@ print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
 
 print 'age=25', Data2.objects.find(age=25).count()
 
+Data(name='Robin', books=[{'bid': 1, 'name': 'Python Cookbook'}, {'bid': 2, 'name': 'Java 23 Days'}, {'bid': 3, 'name': 'Android Kit'}]).save()
+Data(name='Tom', books=[{'bid': 10, 'name': 'DDL'}]).save()
+
+print 'book of [1]:', Data.objects.find({'books.bid': 1}).count()
+print 'book of [2, 10]:', Data.objects.find({'books.bid': {'$in': [2, 10]}}).count()
+
 print Data.objects.find().delete()
 print Data2.objects.find().delete()

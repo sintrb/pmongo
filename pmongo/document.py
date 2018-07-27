@@ -16,7 +16,7 @@ class Manager(object):
 
     def find(self, *args, **kwargs):
         query = QuerySet(self)
-        if kwargs:
+        if args or kwargs:
             query = query.find(*args, **kwargs)
         return query
 
