@@ -79,11 +79,13 @@ class QuerySet(object):
         self.manager = manager
         self.chain = []
         self.sort = None
+        self._values = None
 
     def __copy__(self):
         query = type(self)(self.manager)
         query.chain = [r for r in self.chain]
         query.sort = self.sort
+        query._values = self._values
         return query
 
     def _wrap_query(self, q):
@@ -144,7 +146,13 @@ class QuerySet(object):
         return self.manager.model(data) if data != None else None
 
     def get_cursor(self):
-        cursor = self.col.find(self.query)
+        if type(self._values) == dict:
+            fds = self._values
+        elif self._values:
+            fds = {k:1 for k in self._values}
+        else:
+            fds = None
+        cursor = self.col.find(self.query,  fds)
         if self.sort:
             sorts = [(f[1:], DESCENDING) if f[0] == '-' else (f, ASCENDING) for f in self.sort]
             if len(sorts):
@@ -166,6 +174,11 @@ class QuerySet(object):
     def order_by(self, *args):
         query = self.__copy__()
         query.sort = args
+        return query
+
+    def values(self, *args, **kwargs):
+        query = self.__copy__()
+        query._values = args or kwargs
         return query
 
 

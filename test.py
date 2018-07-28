@@ -90,5 +90,7 @@ Data(name='Tom', books=[{'bid': 10, 'name': 'DDL'}]).save()
 print 'book of [1]:', Data.objects.find({'books.bid': 1}).count()
 print 'book of [2, 10]:', Data.objects.find({'books.bid': {'$in': [2, 10]}}).count()
 
+print Data.objects.find(name='Tom').values(name=0, _id=0).all()
+
 print Data.objects.find().delete()
 print Data2.objects.find().delete()
