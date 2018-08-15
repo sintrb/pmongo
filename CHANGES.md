@@ -16,3 +16,11 @@ CHANGES
 1.0.9
 
 - suport values()
+
+1.0.10
+
+- suport Meta ordering
+
+1.0.11
+
+- remove __eq__ of Document

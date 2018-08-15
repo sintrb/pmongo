@@ -153,8 +153,15 @@ class QuerySet(object):
         else:
             fds = None
         cursor = self.col.find(self.query,  fds)
+        meta = getattr(self.manager.model, 'Meta', None)
+        if meta and getattr(meta, 'ordering', None):
+            sort = tuple(meta.ordering)
+        else:
+            sort = None
         if self.sort:
-            sorts = [(f[1:], DESCENDING) if f[0] == '-' else (f, ASCENDING) for f in self.sort]
+            sort = self.sort
+        if sort:
+            sorts = [(f[1:], DESCENDING) if f[0] == '-' else (f, ASCENDING) for f in sort]
             if len(sorts):
                 cursor = cursor.sort(sorts)
             else:

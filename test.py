@@ -17,6 +17,8 @@ db = get_mongo_db(dbname='test')
 # define document class
 class Data(Document):
     db = db
+    class Meta:
+        ordering = ['age']
 
 
 # new a instance
@@ -31,8 +33,14 @@ d1.save()
 d2 = Data()
 d2['grade'] = 2
 d2['name'] = 'Lucy'
-d2['age'] = 7
+d2['age'] = 6
 d2.save()
+
+d3 = Data()
+d3['grade'] = 3
+d3['name'] = 'Jack'
+d3['age'] = 7
+d3.save()
 
 # display document ObjectId
 print 'd1.id:', d1.id
@@ -42,6 +50,10 @@ print 'grade=2:', Data.objects.find(grade=2).all()
 
 # query count
 print 'count of grade=2:', Data.objects.find(grade=2).count()
+
+# default order by
+print 'default order by', Data.objects.find().all()
+print 'default order by -age', Data.objects.find().order_by('-age').all()
 
 # change
 d2['grade'] = 1
@@ -91,6 +103,17 @@ print 'book of [1]:', Data.objects.find({'books.bid': 1}).count()
 print 'book of [2, 10]:', Data.objects.find({'books.bid': {'$in': [2, 10]}}).count()
 
 print Data.objects.find(name='Tom').values(name=0, _id=0).all()
+
+d1 = Data.objects.find().first()
+d2 = Data.objects.find().first()
+
+print '--------'
+
+print id(d1), d1
+print id(d2), d2
+print d1 == d2
+
+print set([d1, d2])
 
 print Data.objects.find().delete()
 print Data2.objects.find().delete()
