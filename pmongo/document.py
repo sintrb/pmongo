@@ -261,4 +261,4 @@ class Document(six.with_metaclass(BaseDocument)):
             del self.data[k]
         if keys and self.id:
             from bson import ObjectId
-            return self.objects.unset({'_id': ObjectId(self.id) if isinstance(self.id, basestring) else self.id}, keys, db=db)
+            return self.objects.unset({'_id': ObjectId(self.id) if isinstance(self.id, six.string_types) else self.id}, keys, db=db)

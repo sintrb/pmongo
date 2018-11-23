@@ -10,7 +10,7 @@ def get_mongo_db(dbname, host='localhost', port=27017):
     try:
         from pymongo import Connection
         return Connection(host=host, port=port)[dbname]
-    except ImportError, e:
+    except ImportError as e:
         from pymongo import MongoClient
         client = MongoClient(host=host, port=port)
         return client.get_database(dbname)

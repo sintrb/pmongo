@@ -5,12 +5,12 @@ Created on 2018-06-15
 @author: trb
 '''
 
-from document import Manager
+from .document import Manager
 
 
 class QueryManger(Manager):
     def _wrap_query(self, q):
-        from utils import day_end
+        from .utils import day_end
         nq = {}
         wrapm = {
             'integer': lambda v: {'$eq': int(v['integer'])},

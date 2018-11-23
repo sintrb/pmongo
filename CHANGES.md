@@ -24,3 +24,7 @@ CHANGES
 1.0.11
 
 - remove __eq__ of Document
+
+1.0.12
+
+- support Python 3.x

@@ -43,28 +43,28 @@ d3['age'] = 7
 d3.save()
 
 # display document ObjectId
-print 'd1.id:', d1.id
+print('d1.id:', d1.id)
 
 # query
-print 'grade=2:', Data.objects.find(grade=2).all()
+print('grade=2:', Data.objects.find(grade=2).all())
 
 # query count
-print 'count of grade=2:', Data.objects.find(grade=2).count()
+print('count of grade=2:', Data.objects.find(grade=2).count())
 
 # default order by
-print 'default order by', Data.objects.find().all()
-print 'default order by -age', Data.objects.find().order_by('-age').all()
+print('default order by', Data.objects.find().all())
+print('default order by -age', Data.objects.find().order_by('-age').all())
 
 # change
 d2['grade'] = 1
 d2.save()
 
-print 'count of grade=2:', Data.objects.find(grade=2).count()
+print('count of grade=2:', Data.objects.find(grade=2).count())
 
 # delete document
 Data.objects.find(grade=2).delete()
 
-print '-------'
+print('-------')
 
 # django like query
 from pmongo.query import QueryManger
@@ -75,45 +75,45 @@ class Data2(Document):
     objects = QueryManger()
 
 
-print Data2.objects.create(age=20, name='Tom')
+print(Data2.objects.create(age=20, name='Tom'))
 
 Data2(age=10, name='Jone').save()
 Data2(age=15, name='Jack').save()
 
-print 'age>=10:', Data2.objects.find(age__gte=10).count()
-print 'age>11:', Data2.objects.find(age__gt=11).count()
+print('age>=10:', Data2.objects.find(age__gte=10).count())
+print('age>11:', Data2.objects.find(age__gt=11).count())
 
-print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
+print('between 10~21', Data2.objects.find(age__between=(10, 21)).count())
 
 # delete age field
 d1.unset(['age'])
-print d1
+print(d1)
 
 # update data
-print 'update', Data2.objects.find(age__between=(10, 21)).update(age=25)
+print('update', Data2.objects.find(age__between=(10, 21)).update(age=25))
 
-print 'between 10~21', Data2.objects.find(age__between=(10, 21)).count()
+print('between 10~21', Data2.objects.find(age__between=(10, 21)).count())
 
-print 'age=25', Data2.objects.find(age=25).count()
+print('age=25', Data2.objects.find(age=25).count())
 
 Data(name='Robin', books=[{'bid': 1, 'name': 'Python Cookbook'}, {'bid': 2, 'name': 'Java 23 Days'}, {'bid': 3, 'name': 'Android Kit'}]).save()
 Data(name='Tom', books=[{'bid': 10, 'name': 'DDL'}]).save()
 
-print 'book of [1]:', Data.objects.find({'books.bid': 1}).count()
-print 'book of [2, 10]:', Data.objects.find({'books.bid': {'$in': [2, 10]}}).count()
+print('book of [1]:', Data.objects.find({'books.bid': 1}).count())
+print('book of [2, 10]:', Data.objects.find({'books.bid': {'$in': [2, 10]}}).count())
 
-print Data.objects.find(name='Tom').values(name=0, _id=0).all()
+print(Data.objects.find(name='Tom').values(name=0, _id=0).all())
 
 d1 = Data.objects.find().first()
 d2 = Data.objects.find().first()
 
-print '--------'
+print('--------')
 
-print id(d1), d1
-print id(d2), d2
-print d1 == d2
+print(id(d1), d1)
+print(id(d2), d2)
+print(d1 == d2)
 
-print set([d1, d2])
+print(set([d1, d2]))
 
-print Data.objects.find().delete()
-print Data2.objects.find().delete()
+print(Data.objects.find().delete())
+print(Data2.objects.find().delete())
