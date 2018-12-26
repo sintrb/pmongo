@@ -37,12 +37,18 @@ class Manager(object):
     def get(self, *args, **kwargs):
         return self.find().get(*args, **kwargs)
 
-    def save(self, obj, db=None):
+    def save(self, obj, db=None, update_fields=None):
         data = obj.data
+        col = (db or self.db)[self.colname]
         if '_id' in data:
-            (db or self.db)[self.colname].save(data)
+            if update_fields != None:
+                if update_fields:
+                    updata = {k: data[k] for k in update_fields if k in data}
+                    col.update({'_id': self._wrap_objid(data['_id'])}, {'$set': updata})
+            else:
+                col.save(data)
         else:
-            docid = (db or self.db)[self.colname].insert(data)
+            docid = col.insert(data)
             data['_id'] = docid
 
     def unset(self, filter, fields, db=None):
@@ -64,7 +70,7 @@ class Manager(object):
         from bson import ObjectId
         if type(v) == dict:
             return {
-                nk: self._wrap_objid(nv) for nk,nv in v.items()
+                nk: self._wrap_objid(nv) for nk, nv in v.items()
             }
         elif type(v) in [list, type, set]:
             return [self._wrap_objid(nv) for nv in v]
@@ -149,10 +155,10 @@ class QuerySet(object):
         if type(self._values) == dict:
             fds = self._values
         elif self._values:
-            fds = {k:1 for k in self._values}
+            fds = {k: 1 for k in self._values}
         else:
             fds = None
-        cursor = self.col.find(self.query,  fds)
+        cursor = self.col.find(self.query, fds)
         meta = getattr(self.manager.model, 'Meta', None)
         if meta and getattr(meta, 'ordering', None):
             sort = tuple(meta.ordering)
@@ -233,8 +239,8 @@ class Document(six.with_metaclass(BaseDocument)):
     def to_json(self):
         return self.data
 
-    def save(self, db=None):
-        self.objects.save(self)
+    def save(self, db=None, update_fields=None):
+        self.objects.save(self, db=db, update_fields=update_fields)
 
     def update(self, d):
         self.data.update(d)

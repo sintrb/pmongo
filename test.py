@@ -17,6 +17,7 @@ db = get_mongo_db(dbname='test')
 # define document class
 class Data(Document):
     db = db
+
     class Meta:
         ordering = ['age']
 
@@ -57,7 +58,7 @@ print('default order by -age', Data.objects.find().order_by('-age').all())
 
 # change
 d2['grade'] = 1
-d2.save()
+d2.save(update_fields=['grade'])
 
 print('count of grade=2:', Data.objects.find(grade=2).count())
 
@@ -114,6 +115,19 @@ print(id(d2), d2)
 print(d1 == d2)
 
 print(set([d1, d2]))
+
+rcount = Data.objects.find().count()
+d1 = Data.objects.find(name='Robin').first()
+d2 = Data.objects.find(_id=d1.id).first()
+rname = d2['name']
+d2['name'] = 'June'
+d2.save()
+d2['name'] = rname
+d2.save(update_fields=['name'])
+d2 = Data.objects.find(_id=d1.id).first()
+ncount = Data.objects.find().count()
+print(d1.data == d2.data)
+print(rcount == ncount)
 
 print(Data.objects.find().delete())
 print(Data2.objects.find().delete())

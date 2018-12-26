@@ -1,7 +1,7 @@
-from distutils.core import setup
+from setuptools import setup
 import os, io
 
-from pmongo import __version__
+__version__ = '1.0.15'
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = io.open(os.path.join(here, 'README.md'), encoding='UTF-8').read()
@@ -15,6 +15,6 @@ setup(name="pmongo",
       author="trb",
       author_email="sintrb@gmail.com",
       packages=['pmongo'],
-      install_requires=['pymongo'],
+      install_requires=['pymongo', 'six'],
       zip_safe=False
       )

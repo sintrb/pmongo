@@ -28,3 +28,7 @@ CHANGES
 1.0.12
 
 - support Python 3.x
+
+1.0.14
+
+- support update_fields when save a document
