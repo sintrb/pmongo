@@ -32,3 +32,7 @@ CHANGES
 1.0.14
 
 - support update_fields when save a document
+
+1.0.16
+
+- fix $lte date bug

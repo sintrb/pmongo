@@ -18,6 +18,6 @@ def get_mongo_db(dbname, host='localhost', port=27017):
 
 def day_end(dt):
     import datetime
-    if dt and type(dt) == datetime.datetime:
+    if dt and type(dt) == datetime.date:
         return datetime.datetime(dt.year, dt.month, dt.day, 23, 59, 59)
     return dt
